@@ -1,17 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { App } from './App';
+import { NoteBrowse } from './pages/NoteBrowse/NoteBrowse';
+import { Note } from './pages/Note/Note';
+import { NoteCreate } from './pages/NoteCreate/NoteCreate';
+import { PageNotFound } from './pages/PageNotFound/PageNotFound';
+import { StrictMode } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+root.render(
+  <StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<App />}>
+            <Route path='/' element={<NoteBrowse />} />
+            <Route path='/note/:id' element={<Note />} />
+            <Route path='/note/new' element={<NoteCreate />} />
+            <Route path='*' element={<PageNotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
+  </StrictMode>
+);
