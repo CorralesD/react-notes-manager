@@ -20,7 +20,9 @@ export const App = () => {
   return (
     <div>
       <Header />
-      <Outlet />
+      <div style={{ padding: 50 }}>
+        <Outlet />
+      </div>
     </div>
   );
 };
