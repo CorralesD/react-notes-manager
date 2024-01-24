@@ -14,11 +14,21 @@ const VALIDATOR = {
   },
 };
 
-export const NoteForm = ({ title, onClickEdit, onCLickDelete, onSubmit }) => {
-  const [formValues, setFormValues] = useState({ title: '', content: '' });
+export const NoteForm = ({
+  isEditable = true,
+  note,
+  title,
+  onClickEdit,
+  onClickDelete,
+  onSubmit,
+}) => {
+  const [formValues, setFormValues] = useState({
+    title: note?.title || '',
+    content: note?.content || '',
+  });
   const [formErrors, setFormErrors] = useState({
-    title: true,
-    content: true,
+    title: note?.title ? undefined : true,
+    content: note?.content ? undefined : true,
   });
 
   const updateFormValues = (e) => {
@@ -48,10 +58,12 @@ export const NoteForm = ({ title, onClickEdit, onCLickDelete, onSubmit }) => {
   const actionIcons = (
     <>
       <div className='col-1'>
-        {onClickEdit && <PencilFill className={s.icon} />}
+        {onClickEdit && <PencilFill onClick={onClickEdit} className={s.icon} />}
       </div>
       <div className='col-1'>
-        {onCLickDelete && <TrashFill className={s.icon} />}
+        {onClickDelete && (
+          <TrashFill onClick={onClickDelete} className={s.icon} />
+        )}
       </div>
     </>
   );
@@ -63,6 +75,7 @@ export const NoteForm = ({ title, onClickEdit, onCLickDelete, onSubmit }) => {
         type='text'
         name='title'
         className='form-control'
+        value={formValues.title}
       />
       <FieldError msg={formErrors.title} />
     </div>
@@ -76,6 +89,7 @@ export const NoteForm = ({ title, onClickEdit, onCLickDelete, onSubmit }) => {
         name='content'
         className='form-control'
         row='5'
+        value={formValues.content}
       />
       <FieldError msg={formErrors.content} />
     </div>
@@ -99,8 +113,12 @@ export const NoteForm = ({ title, onClickEdit, onCLickDelete, onSubmit }) => {
         </div>
         {actionIcons}
       </div>
-      <div className={`mb-3 ${s.title_input_container}`}>{titleInput}</div>
-      <div className='mb-3'>{contentInput}</div>
+      <div className={`mb-3 ${s.title_input_container}`}>
+        {isEditable && titleInput}
+      </div>
+      <div className='mb-3'>
+        {isEditable ? contentInput : <pre>{note.content}</pre>}
+      </div>
       {onSubmit && submitBtn}
     </div>
   );
